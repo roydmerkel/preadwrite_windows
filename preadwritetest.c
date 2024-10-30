@@ -82,7 +82,7 @@ int main(void)
 
 	// write past end
 	fd = open(tempFilePath, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
-	write(fd, "abc123\n", strlen("abc123\n"));
+	write(fd, "abc123\x0A", strlen("abc123\x0A"));
 	close(fd);
 
 
@@ -133,7 +133,7 @@ int main(void)
 	{
 		perror("open");
 	}
-	pfuncResult = pwrite(fd, "jkl567\n", 7, 7);
+	pfuncResult = pwrite(fd, "jkl567\n", strlen("jkl567\n"), 7);
 	if(pfuncResult == -1)
 	{
 		perror("pwrite");
@@ -171,7 +171,7 @@ int main(void)
 	{
 		perror("open");
 	}
-	pfuncResult = pwrite(fd, "jkl567\n", 7, 7);
+	pfuncResult = pwrite(fd, "jkl567\n", strlen("jkl567\n"), 7);
 	if(pfuncResult == -1)
 	{
 		perror("pwrite");
@@ -208,7 +208,7 @@ int main(void)
 	{
 		perror("open");
 	}
-	pfuncResult = pwrite(fd, "jkl567\n", 7, 7);
+	pfuncResult = pwrite(fd, "jkl567\n", strlen("jkl567\n"), 7);
 	if(pfuncResult == -1)
 	{
 		perror("pwrite");
@@ -217,12 +217,24 @@ int main(void)
 	if(closeRes == -1)
 		perror("close");
 
+	fileData = readFileToString(tempFilePath, &fileDataSize);
+	for(i = 0; i < fileDataSize; i++)
+	{
+		if(isprint(fileData[i]) || isspace(fileData[i]))
+		{
+			printf("%c", fileData[i]);
+		} else {
+			printf("[0x%02hx]", ((unsigned short)fileData[i] & 0xFF));
+		}
+	}
+	printf("\n\n");
+
 	fd = open(tempFilePath, O_RDONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
 	if(fd == -1)
 	{
 		perror("open");
 	}
-	pfuncResult = pread(fd, readBuffer, 7, 7);
+	pfuncResult = pread(fd, readBuffer, strlen("jkl567\n"), 7);
 	if(pfuncResult == -1)
 	{
 		perror("pread");

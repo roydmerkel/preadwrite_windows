@@ -143,7 +143,7 @@ int main(void)
 	fd = _open(tempFilePath, _O_WRONLY | _O_BINARY | _O_TRUNC | _O_CREAT, _S_IREAD | _S_IWRITE);
 	if(fd == -1)
 		ErrorExit(_T("_open"));
-	writeRes = _write(fd, "abc123\n", strlen("abc123\n"));
+	writeRes = _write(fd, "abc123""\x0A", strlen("abc123""\x0A"));
 	if(writeRes == -1)
 		ErrorExit(_T("_write"));
 	closeRes = _close(fd);
@@ -156,7 +156,7 @@ int main(void)
 	{
 		perror("_open");
 	}
-	pfuncResult = pwrite(fd, "def456\n", strlen("def456\n"), 9);
+	pfuncResult = pwrite(fd, "def456""\x0A", strlen("def456""\x0A"), 9);
 	if(pfuncResult == -1)
 	{
 		perror("pwrite");
@@ -181,7 +181,7 @@ int main(void)
 	fd = _open(tempFilePath, _O_WRONLY | _O_BINARY | _O_TRUNC | _O_CREAT, _S_IREAD | _S_IWRITE);
 	if(fd == -1)
 		ErrorExit(_T("_open"));
-	writeRes = _write(fd, "abc123\ndef123\nghi123\n", strlen("abc123\ndef123\nghi123\n"));
+	writeRes = _write(fd, "abc123""\x0A""def123""\x0A""ghi123""\x0A", strlen("abc123""\x0A""def123""\x0A""ghi123""\x0A"));
 	if(writeRes == -1)
 		ErrorExit(_T("_write"));
 	closeRes = _close(fd);
@@ -194,7 +194,7 @@ int main(void)
 	{
 		perror("_open");
 	}
-	pfuncResult = pwrite(fd, "jkl567\n", 7, 7);
+	pfuncResult = pwrite(fd, "jkl567""\x0A", strlen("jkl567""\x0A"), 7);
 	if(pfuncResult == -1)
 	{
 		perror("pwrite");
@@ -219,7 +219,7 @@ int main(void)
 	fd = _open(tempFilePath, _O_WRONLY | _O_BINARY | _O_TRUNC | _O_CREAT, _S_IREAD | _S_IWRITE);
 	if(fd == -1)
 		ErrorExit(_T("_open"));
-	writeRes = _write(fd, "abc123\ndef123\nghi123\n", strlen("abc123\ndef123\nghi123\n"));
+	writeRes = _write(fd, "abc123""\x0A""def123""\x0A""ghi123""\x0A", strlen("abc123""\x0A""def123""\x0A""ghi123""\x0A"));
 	if(writeRes == -1)
 		ErrorExit(_T("_write"));
 	closeRes = _close(fd);
@@ -232,7 +232,7 @@ int main(void)
 	{
 		perror("_open");
 	}
-	pfuncResult = pwrite(fd, "jkl567\n", 7, 7);
+	pfuncResult = pwrite(fd, "jkl567""\x0A", strlen("jkl567""\x0A"), 7);
 	if(pfuncResult == -1)
 	{
 		perror("pwrite");
@@ -257,7 +257,7 @@ int main(void)
 	fd = _open(tempFilePath, _O_WRONLY | _O_BINARY | _O_TRUNC | _O_CREAT, _S_IREAD | _S_IWRITE);
 	if(fd == -1)
 		ErrorExit(_T("_open"));
-	writeRes = write(fd, "abc123\ndef123\nghi123\n", strlen("abc123\ndef123\nghi123\n"));
+	writeRes = write(fd, "abc123""\x0A""def123""\x0A""ghi123""\x0A", strlen("abc123""\x0A""def123""\x0A""ghi123""\x0A"));
 	if(writeRes == -1)
 		ErrorExit(_T("write"));
 	closeRes = _close(fd);
@@ -270,7 +270,7 @@ int main(void)
 	{
 		ErrorExit(_T("_open"));
 	}
-	pfuncResult = pwrite(fd, "jkl567\n", 7, 7);
+	pfuncResult = pwrite(fd, "jkl567""\x0A", strlen("jkl567""\x0A"), 7);
 	if(pfuncResult == -1)
 	{
 		ErrorExit(_T("pwrite"));
@@ -284,7 +284,7 @@ int main(void)
 	{
 		ErrorExit(_T("open"));
 	}
-	pfuncResult = pread(fd, readBuffer, 7, 7);
+	pfuncResult = pread(fd, readBuffer, strlen("jkl567""\x0A"), 7);
 	if(pfuncResult == -1)
 	{
 		ErrorExit(_T("pread"));
