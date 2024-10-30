@@ -12,7 +12,7 @@ ssize_t pwrite (int fd, const void *buf, size_t len, off_t off)
          return -1L;
   }
 
-  writeResult = _write(fd, buf, len - 1);
+  writeResult = _write(fd, buf, len);
   _lseeki64 (fd, filePos, SEEK_SET);
 
   return writeResult;

@@ -133,7 +133,7 @@ int main(void)
 	{
 		perror("open");
 	}
-	pfuncResult = pwrite(fd, "jkl567\n", strlen("jkl567\n"), 7);
+	pfuncResult = pwrite(fd, "jkl567\n", 7, 7);
 	if(pfuncResult == -1)
 	{
 		perror("pwrite");
@@ -171,7 +171,7 @@ int main(void)
 	{
 		perror("open");
 	}
-	pfuncResult = pwrite(fd, "jkl567\n", strlen("jkl567\n"), 7);
+	pfuncResult = pwrite(fd, "jkl567\n", 7, 7);
 	if(pfuncResult == -1)
 	{
 		perror("pwrite");
@@ -208,7 +208,7 @@ int main(void)
 	{
 		perror("open");
 	}
-	pfuncResult = pwrite(fd, "jkl567\n", strlen("jkl567\n"), 7);
+	pfuncResult = pwrite(fd, "jkl567\n", 7, 7);
 	if(pfuncResult == -1)
 	{
 		perror("pwrite");
@@ -222,7 +222,7 @@ int main(void)
 	{
 		perror("open");
 	}
-	pfuncResult = pread(fd, readBuffer, strlen("jkl567\n"), 7);
+	pfuncResult = pread(fd, readBuffer, 7, 7);
 	if(pfuncResult == -1)
 	{
 		perror("pread");
