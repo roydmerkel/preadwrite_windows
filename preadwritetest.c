@@ -58,6 +58,7 @@ int main(void)
 	int i;
 	int writeRes;
 	int closeRes;
+	char readBuffer[10] = {0};
 
 	tempDir = getenv("TMPDIR");
 
@@ -189,6 +190,48 @@ int main(void)
 			printf("[0x%02hx]", ((unsigned short)fileData[i] & 0xFF));
 		}
 	}
+	printf("\n\n");
+
+	// read in middle
+	fd = open(tempFilePath, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	if(fd == -1)
+		perror("open");
+	writeRes = write(fd, "abc123\ndef123\nghi123\n", strlen("abc123\ndef123\nghi123\n"));
+	if(writeRes == -1)
+		perror("write");
+	closeRes = close(fd);
+	if(closeRes == -1)
+		perror("close");
+
+	fd = open(tempFilePath, O_WRONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	if(fd == -1)
+	{
+		perror("open");
+	}
+	pfuncResult = pwrite(fd, "jkl567\n", strlen("jkl567\n"), 7);
+	if(pfuncResult == -1)
+	{
+		perror("pwrite");
+	}
+	closeRes = close(fd);
+	if(closeRes == -1)
+		perror("close");
+
+	fd = open(tempFilePath, O_RDONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	if(fd == -1)
+	{
+		perror("open");
+	}
+	pfuncResult = pread(fd, readBuffer, strlen("jkl567\n"), 7);
+	if(pfuncResult == -1)
+	{
+		perror("pread");
+	}
+	closeRes = close(fd);
+	if(closeRes == -1)
+		perror("close");
+
+	printf("\"%s\"\n", readBuffer);
 	printf("\n\n");
 
 	return 0;

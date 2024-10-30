@@ -94,6 +94,7 @@ int main(void)
 	int pfuncResult;
 	const char *fileData = NULL;
 	int fileDataSize = 0;
+	char readBuffer[10] = {0};
 
 	hTempDir = LocalAlloc(LHND, sizeof (TCHAR) * (MAX_PATH + 1));
 
@@ -250,6 +251,49 @@ int main(void)
 			printf("[0x%02hx]", ((unsigned short)fileData[i] & 0xFF));
 		}
 	}
+	printf("\n\n");
+
+	// read in middle
+	fd = _open(tempFilePath, _O_WRONLY | _O_BINARY | _O_TRUNC | _O_CREAT, _S_IREAD | _S_IWRITE);
+	if(fd == -1)
+		ErrorExit(_T("_open"));
+	writeRes = write(fd, "abc123\ndef123\nghi123\n", strlen("abc123\ndef123\nghi123\n"));
+	if(writeRes == -1)
+		ErrorExit(_T("write"));
+	closeRes = _close(fd);
+	if(closeRes == -1)
+		ErrorExit(_T("_close"));
+
+
+	fd = _open(tempFilePath, _O_WRONLY | _O_BINARY, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	if(fd == -1)
+	{
+		ErrorExit(_T("_open"));
+	}
+	pfuncResult = pwrite(fd, "jkl567\n", strlen("jkl567\n"), 7);
+	if(pfuncResult == -1)
+	{
+		ErrorExit(_T("pwrite"));
+	}
+	closeRes = _close(fd);
+	if(closeRes == -1)
+		ErrorExit(_T("_close"));
+
+	fd = _open(tempFilePath, _O_RDONLY | _O_BINARY , S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+	if(fd == -1)
+	{
+		ErrorExit(_T("open"));
+	}
+	pfuncResult = pread(fd, readBuffer, strlen("jkl567\n"), 7);
+	if(pfuncResult == -1)
+	{
+		ErrorExit(_T("pread"));
+	}
+	closeRes = close(fd);
+	if(closeRes == -1)
+		ErrorExit(_T("close"));
+
+	printf("\"%s\"\n", readBuffer);
 	printf("\n\n");
 
 	return 0;

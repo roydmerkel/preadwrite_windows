@@ -28,7 +28,7 @@ ssize_t pread (int fd, void *buf, size_t len, off_t off)
          return -1L;
   }
 
-  readResult = _read(fd, buf, len - 1);
+  readResult = _read(fd, buf, len);
   _lseeki64 (fd, filePos, SEEK_SET);
 
   return readResult;
